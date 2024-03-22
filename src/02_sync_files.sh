@@ -16,7 +16,7 @@ target_dir="$backup_dir/backup/"
 mkdir -p $target_dir
 source_file=$1
 
-echo "[LOG] Backing up files based on list: `${source_file}`."
+echo "[LOG] Backing up files based on file: \`${source_file}\`."
 echo "[LOG] Truncating input list."
 sd_flags='-F'
 sd_find=$base_dir
@@ -32,6 +32,6 @@ rsync_flags="-u -v --log-file=$rsync_log_file"
 rsync_src=$truncated_file
 rsync_dst=$target_dir
 rsync_cmd="${rsync_bin} ${rsync_flags} --files-from=${rsync_src} ${base_dir} ${rsync_dst}"
-echo "[LOG] Using the following command for `rsync` to backup files:"
+echo "[LOG] Using the following command for \`rsync\` to backup files:"
 echo "[LOG] $rsync_cmd"
 $rsync_cmd
