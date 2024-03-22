@@ -28,7 +28,7 @@ $sd_bin $sd_flags $sd_find '' $truncated_file
 
 rsync_bin='/usr/bin/rsync'
 rsync_log_file="$backup_dir/output/rsync_log"
-rsync_flags="-u -v --log-file=$rsync_log_file"
+rsync_flags="-u -v --delete --log-file=$rsync_log_file"
 rsync_src=$truncated_file
 rsync_dst=$target_dir
 rsync_cmd="${rsync_bin} ${rsync_flags} --files-from=${rsync_src} ${base_dir} ${rsync_dst}"

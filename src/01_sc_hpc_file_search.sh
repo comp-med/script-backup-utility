@@ -26,7 +26,7 @@ search_term='/script[s]?'
 
 # Collect file extensions to in- and exclude
 include_extensions=(R r sh smk py qmd ipynb)
-exclude_extensions=(tsv csv txt xls xlsx png pdf feather parquet RData html)
+exclude_extensions=(tsv csv txt xls xlsx png pdf feather parquet RData html log out)
 exclude_files=(.RData)
 exclude_dirs=(renv globus x86_64-pc-linux-gnu-library x86_64-conda-linux-gnu-library .ipynb_checkpoints)
 
@@ -37,13 +37,14 @@ for dir in ${exclude_dirs[@]}; do
 done
 
 # Search for directories bsaed on the search term
+fd_bin='/home/cabe12/micromamba/envs/nvim/bin/fd'
 fd_flags_dirs='-i -p -t d --prune'
 
 echo "[LOG] Using \`$search_term\` as searcht term."
 echo "[LOG] Running directory search."
 
 # Search all `scripts` directories (NOTE: Takes a while)
-fd $fd_flags_dirs $fd_exclude_flag $search_term $project_dir > $dir_list_file
+$fd_bin $fd_flags_dirs $fd_exclude_flag $search_term $project_dir > $dir_list_file
 
 echo "[LOG] Finished directory search."
 log_number_of_dirs=$(cat $dir_list_file | wc -l)
@@ -102,8 +103,8 @@ for ext in ${exclude_extensions[@]}; do
 done
 
 fd_flags_files='-i -p -t f --prune'
-fd $fd_flags_files $fd_exclude_flag $fd_exclude_extensions_flag ./ $(<$dir_list_file) > $file_list_inclusive
-fd $fd_flags_files $fd_exclude_flag $fd_include_extensions_flag ./ $(<$dir_list_file) > $file_list_exclusive
+$fd_bin $fd_flags_files $fd_exclude_flag $fd_exclude_extensions_flag ./ $(<$dir_list_file) > $file_list_inclusive
+$fd_bin $fd_flags_files $fd_exclude_flag $fd_include_extensions_flag ./ $(<$dir_list_file) > $file_list_exclusive
 
 log_file_number_inclusive=$(cat $file_list_inclusive | wc -l)
 log_file_number_exclusive=$(cat $file_list_exclusive | wc -l)
@@ -113,7 +114,7 @@ echo "[LOG] Found $log_file_number_exclusive directories based on an exclusive s
 # Enclose the files in quotation marks so `du` can handle them
 file_list_inclusive_quoted="${file_list_inclusive}_quoted"
 file_list_exclusive_quoted="${file_list_exclusive}_quoted"
-rm $file_list_inclusive_quoted $file_list_exclusive_quoted
+rm -f $file_list_inclusive_quoted $file_list_exclusive_quoted
 while IFS= read -r dir; do
     echo "\"$dir\"" >> "$file_list_inclusive_quoted"
 done < "$file_list_inclusive"
