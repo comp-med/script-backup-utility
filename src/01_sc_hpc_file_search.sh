@@ -5,8 +5,8 @@ eval "$(micromamba shell hook --shell bash)"
 micromamba activate nvim
 
 # Variables and files
-backup_dir='/sc-projects/sc-proj-computational-medicine/people/00_BACKUP'
-project_dir='/sc-projects/sc-proj-computational-medicine/people'
+base_dir='/sc-projects/sc-proj-computational-medicine/people'
+backup_dir="${base_dir}/00_BACKUP"
 output_dir="${backup_dir}/output"
 dir_list_file="${output_dir}/script_dir_list"
 dir_list_file_sorted="${output_dir}/script_dir_list_sorted"
@@ -20,6 +20,8 @@ file_list_size_inclusive="${output_dir}/script_file_list_size_inclusive"
 # Searching for all files except those in $include_extensions
 file_list_exclusive="${output_dir}/script_file_list_exclusive"
 file_list_size_exclusive="${output_dir}/script_file_list_size_exclusive"
+
+fd_bin='/home/cabe12/micromamba/envs/nvim/bin/fd'
 
 # Directory to look for that contains scripts
 search_term='/script[s]?'
@@ -37,14 +39,13 @@ for dir in ${exclude_dirs[@]}; do
 done
 
 # Search for directories bsaed on the search term
-fd_bin='/home/cabe12/micromamba/envs/nvim/bin/fd'
 fd_flags_dirs='-i -p -t d --prune'
 
 echo "[LOG] Using \`$search_term\` as searcht term."
 echo "[LOG] Running directory search."
 
 # Search all `scripts` directories (NOTE: Takes a while)
-$fd_bin $fd_flags_dirs $fd_exclude_flag $search_term $project_dir > $dir_list_file
+$fd_bin $fd_flags_dirs $fd_exclude_flag $search_term $base_dir > $dir_list_file
 
 echo "[LOG] Finished directory search."
 log_number_of_dirs=$(cat $dir_list_file | wc -l)
@@ -83,6 +84,7 @@ cat $dir_list_file  | xargs $du_call \
     $du_exclude_extensions_flag | \
     $sort_call > $dir_list_file_size_filtered
 directory_size_filtered=$(head $dir_list_file_size_filtered -n 1 | awk '{print $1}')
+
 echo "[LOG] Size of found directories exluding large files: $directory_size_filtered"
 
 # -----------------------------------------------------------------------------
@@ -108,6 +110,7 @@ $fd_bin $fd_flags_files $fd_exclude_flag $fd_include_extensions_flag ./ $(<$dir_
 
 log_file_number_inclusive=$(cat $file_list_inclusive | wc -l)
 log_file_number_exclusive=$(cat $file_list_exclusive | wc -l)
+
 echo "[LOG] Found $log_file_number_inclusive files based on an inclusive search (i.e. excluding certain file types)."
 echo "[LOG] Found $log_file_number_exclusive directories based on an exclusive search (i.e. only including certain file types)."
 
@@ -131,6 +134,7 @@ cat $file_list_exclusive_quoted | \
     $sort_call > $file_list_size_exclusive
 log_file_size_inclusive=$(head $file_list_size_inclusive -n 1 | awk '{print $1}')
 log_file_size_exclusive=$(head $file_list_size_exclusive -n 1 | awk '{print $1}')
+
 echo "[LOG] Size of all files: Inclusive: $log_file_size_inclusive, Exclusive: $log_file_size_exclusive"
 echo "[LOG] Done!"
 
