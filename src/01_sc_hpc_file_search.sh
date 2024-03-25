@@ -1,11 +1,20 @@
 #! /bin/bash
 
+# Check if an argument is provided
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <BASE_DIR>"
+    exit 1
+fi
+
 # Environment containing the utilities used
 eval "$(micromamba shell hook --shell bash)"
 micromamba activate nvim
 
+# This is specific to my account (obviously)
+fd_bin='/home/cabe12/micromamba/envs/nvim/bin/fd'
+
 # Variables and files
-base_dir='/sc-projects/sc-proj-computational-medicine/people'
+base_dir=$1
 backup_dir="${base_dir}/00_BACKUP"
 output_dir="${backup_dir}/output"
 dir_list_file="${output_dir}/script_dir_list"
@@ -21,7 +30,6 @@ file_list_size_inclusive="${output_dir}/script_file_list_size_inclusive"
 file_list_exclusive="${output_dir}/script_file_list_exclusive"
 file_list_size_exclusive="${output_dir}/script_file_list_size_exclusive"
 
-fd_bin='/home/cabe12/micromamba/envs/nvim/bin/fd'
 
 # Directory to look for that contains scripts
 search_term='/script[s]?'

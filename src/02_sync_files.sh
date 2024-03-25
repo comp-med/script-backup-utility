@@ -5,19 +5,20 @@ eval "$(micromamba shell hook --shell bash)"
 micromamba activate nvim
 
 # Check if an argument is provided
-if [ $# -ne 1 ]; then
-    echo "Usage: $0 <FILE_LIST>"
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 <BASE_DIR> <FILE_LIST>"
     exit 1
 fi
+
+base_dir=$1
+source_file=$2
 
 sd_bin=/home/cabe12/micromamba/envs/nvim/bin/sd
 rsync_bin='/usr/bin/rsync'
 
-base_dir='/sc-projects/sc-proj-computational-medicine/people/'
 backup_dir="${base_dir}/00_BACKUP"
 target_dir="$backup_dir/backup/"
 mkdir -p $target_dir
-source_file=$1
 
 echo "[LOG] Backing up files based on file: \`${source_file}\`."
 echo "[LOG] Truncating input list."
