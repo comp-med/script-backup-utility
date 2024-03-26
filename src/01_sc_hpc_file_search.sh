@@ -8,7 +8,7 @@ fi
 
 # Environment containing the utilities used
 eval "$(micromamba shell hook --shell bash)"
-micromamba activate nvim
+# micromamba activate nvim
 
 # This is specific to my account (obviously)
 fd_bin='/home/cabe12/micromamba/envs/nvim/bin/fd'
