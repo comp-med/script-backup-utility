@@ -1,3 +1,5 @@
 output/*
 tags
 backup/*
+src/03_run_backup.sh
+src/04_update_file_list.sh
