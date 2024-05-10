@@ -8,10 +8,9 @@ fi
 
 # Environment containing the utilities used
 eval "$(micromamba shell hook --shell bash)"
-# micromamba activate nvim
 
 # This is specific to my account (obviously)
-fd_bin='/home/cabe12/micromamba/envs/nvim/bin/fd'
+fd_bin='/usr/bin/fd'
 
 # Variables and files
 base_dir=$1
@@ -145,4 +144,3 @@ log_file_size_exclusive=$(head $file_list_size_exclusive -n 1 | awk '{print $1}'
 
 echo "[LOG] Size of all files: Inclusive: $log_file_size_inclusive, Exclusive: $log_file_size_exclusive"
 echo "[LOG] Done!"
-
